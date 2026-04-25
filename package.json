@@ -1,0 +1,13 @@
+{
+  "name": "meme-creation-and-social-sharing-web-app",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace web",
+    "build": "npm run build --workspace web",
+    "lint": "npm run lint --workspace web"
+  }
+}
+
