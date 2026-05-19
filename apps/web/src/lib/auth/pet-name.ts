@@ -46,6 +46,7 @@ type StoredUser = {
 };
 
 function readDemoDb(): StoredUser[] {
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(DEMO_DB_KEY);
     return raw ? (JSON.parse(raw) as StoredUser[]) : [];
@@ -55,6 +56,7 @@ function readDemoDb(): StoredUser[] {
 }
 
 function writeDemoDb(users: StoredUser[]) {
+  if (typeof window === "undefined") return;
   localStorage.setItem(DEMO_DB_KEY, JSON.stringify(users));
 }
 
@@ -69,10 +71,12 @@ export function readPetNameSession(): { user: PetNameUser; token: string } | nul
 }
 
 export function persistPetNameSession(user: PetNameUser, token: string) {
+  if (typeof window === "undefined") return;
   localStorage.setItem(SESSION_KEY, JSON.stringify({ user, token }));
 }
 
 export function clearPetNameSession() {
+  if (typeof window === "undefined") return;
   localStorage.removeItem(SESSION_KEY);
   createBrowserSupabaseClient()?.auth.signOut();
 }
