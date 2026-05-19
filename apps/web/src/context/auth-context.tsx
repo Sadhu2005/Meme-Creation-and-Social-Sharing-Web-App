@@ -16,7 +16,6 @@ import {
   type PetNameUser
 } from "@/lib/auth/pet-name";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
-import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 interface AuthContextValue {
   user: PetNameUser | null;
@@ -28,9 +27,13 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function readInitialUser(): PetNameUser | null {
+  if (typeof window === "undefined") return null;
+  return readPetNameSession()?.user ?? null;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<PetNameUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<PetNameUser | null>(readInitialUser);
 
   const refresh = useCallback(() => {
     const session = readPetNameSession();
@@ -38,9 +41,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    refresh();
-    setLoading(false);
-
     const supabase = createBrowserSupabaseClient();
     if (!supabase) return;
 
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => sub.subscription.unsubscribe();
-  }, [refresh]);
+  }, []);
 
   const signOut = useCallback(async () => {
     clearPetNameSession();
@@ -70,12 +70,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       user,
-      loading,
+      loading: false,
       isAuthenticated: Boolean(user),
       refresh,
       signOut
     }),
-    [user, loading, refresh, signOut]
+    [user, refresh, signOut]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -89,5 +89,5 @@ export function useAuth() {
 
 export function useRequiresAuth() {
   const auth = useAuth();
-  return { ...auth, needsSignIn: !auth.loading && !auth.isAuthenticated };
+  return { ...auth, needsSignIn: !auth.isAuthenticated };
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useAuth } from "@/context/auth-context";
 import { FeedCard } from "@/features/feed/feed-card";
@@ -16,18 +16,20 @@ interface ProfileViewProps {
 
 export function ProfileView({ username, initialMemes = [] }: ProfileViewProps) {
   const { user } = useAuth();
-  const [memes, setMemes] = useState<Meme[]>(initialMemes);
+  const useSupabase = hasSupabaseEnv();
+  const [overrides, setOverrides] = useState<Record<string, Meme>>({});
+
+  const baseMemes = useMemo(
+    () => (useSupabase ? initialMemes : listDemoMemesByAuthor(username, user?.id)),
+    [useSupabase, initialMemes, username, user?.id]
+  );
+
+  const memes = baseMemes.map((meme) => overrides[meme.id] ?? meme);
   const isOwnProfile = user?.pet_name.toLowerCase() === username.toLowerCase();
 
-  useEffect(() => {
-    if (!hasSupabaseEnv()) {
-      setMemes(listDemoMemesByAuthor(username, user?.id));
-    }
-  }, [username, user?.id]);
-
-  const handleUpdate = (updated: Meme) => {
-    setMemes((list) => list.map((m) => (m.id === updated.id ? updated : m)));
-  };
+  const handleUpdate = useCallback((updated: Meme) => {
+    setOverrides((prev) => ({ ...prev, [updated.id]: updated }));
+  }, []);
 
   const totalLikes = memes.reduce((sum, m) => sum + m.likeCount, 0);
 
