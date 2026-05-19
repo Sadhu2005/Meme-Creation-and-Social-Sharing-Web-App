@@ -1,14 +1,32 @@
 export type MemeStatus = "draft" | "published" | "archived";
 
-export interface MemePreview {
+export interface Meme {
   id: string;
   title: string;
   caption: string;
-  author: string;
-  imageLabel: string;
+  imageUrl: string;
+  authorId: string;
+  authorUsername: string;
   tags: string[];
-  likes: number;
-  comments: number;
+  likeCount: number;
+  commentCount: number;
+  likedByMe: boolean;
   status: MemeStatus;
+  createdAt: string;
 }
 
+export interface MemeComment {
+  id: string;
+  memeId: string;
+  authorId: string;
+  authorUsername: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface PublishMemeInput {
+  title: string;
+  caption: string;
+  imageDataUrl: string;
+  tags?: string[];
+}

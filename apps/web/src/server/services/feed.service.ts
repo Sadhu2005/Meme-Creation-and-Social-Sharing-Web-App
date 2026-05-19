@@ -1,6 +1,6 @@
-import { listFeedMemes } from "@/server/repositories/memes.repository";
+import { listFeedMemesFromDb } from "@/server/repositories/memes.repository";
 
-export async function getFeedPreview() {
-  return listFeedMemes();
+export async function getFeedMemes(userId?: string) {
+  const fromDb = await listFeedMemesFromDb(userId);
+  return fromDb ?? [];
 }
-
