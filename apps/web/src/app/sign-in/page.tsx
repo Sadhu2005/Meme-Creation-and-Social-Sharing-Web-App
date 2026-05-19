@@ -6,8 +6,8 @@ export default function SignInPage() {
     <div className="space-y-10">
       <PageIntro
         eyebrow="Authentication"
-        title="Connect Supabase auth and bring creators into the app."
-        description="This page is ready for email login, OAuth, protected routes, and profile creation once your Supabase credentials are added."
+        title="Sign in with your pet name"
+        description="Privacy-first auth — no email or phone. One account per device."
       />
       <SignInCard />
     </div>

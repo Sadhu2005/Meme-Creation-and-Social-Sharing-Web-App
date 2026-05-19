@@ -32,8 +32,8 @@ export default function HomePage() {
             Create memes, ship an audience-ready feed, and grow from one repo.
           </h1>
           <p className="mt-6 max-w-xl text-base leading-7 text-white/76">
-            The repo is now scaffolded for a real product flow: public landing, auth entry, meme editor, feed, profile,
-            Supabase integration points, and database migrations.
+            Privacy-first meme social app — create with the canvas editor, publish to the feed, like and comment. No email
+            or phone required to join.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -44,10 +44,10 @@ export default function HomePage() {
               Open editor
             </Link>
             <Link
-              href="/feed"
+              href="/sign-up"
               className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              View feed
+              Join free
             </Link>
           </div>
         </div>

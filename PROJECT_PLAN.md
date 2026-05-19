@@ -2,8 +2,9 @@
 
 ## Current State
 
-- GitHub remote connected: `origin -> https://github.com/Sadhu2005/Meme-Creation-and-Social-Sharing-Web-App.git`
-- Repository is currently empty, so this plan assumes a greenfield build
+- **Main app**: `apps/web` (Next.js + Supabase)
+- **Deploy**: Vercel + Supabase free tiers — see `docs/HOSTING.md`
+- Legacy `frontend/` and `backend/` prototypes removed from active development
 
 ## Recommended Stack
 

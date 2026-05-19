@@ -1,45 +1,58 @@
 # Meme Creation and Social Sharing Web App
 
-This repository now includes the initial product scaffold for a meme creation and social sharing platform built with Next.js and Supabase.
+Privacy-first meme platform — create memes, publish to a feed, like and comment. No email required (pet-name accounts).
 
 ## Stack
 
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- Supabase Auth, Postgres, and Storage
+- **Frontend**: Next.js 16 (`apps/web`) + TypeScript + Tailwind CSS
+- **Backend / DB / Auth / Storage**: Supabase (Postgres, Auth, Storage)
+- **CI**: GitHub Actions (lint + build)
 
-## Workspace
+## Project structure
 
 ```text
 .
-|- apps/
-|  `- web/
-|- docs/
-|- supabase/
-`- PROJECT_PLAN.md
+├── apps/web/          ← main app (use this)
+├── supabase/          ← database migrations
+├── docs/              ← architecture + hosting guide
+└── .github/workflows/
 ```
 
-## Quick Start
+> **Legacy folders removed:** `gitworkflow/` (presentation site). If you still see `frontend/` or `backend/`, stop dev servers on ports **5173** and **5000**, then run `scripts/cleanup-legacy.ps1` or delete those folders manually.
 
-1. Copy `.env.example` to `.env.local`
-2. Add your Supabase project URL and anon key
-3. Install dependencies with `npm install`
-4. Start the app with `npm run dev`
+## Quick start
 
-## Current MVP Surface
+```bash
+npm install
+npm run dev
+```
 
-- landing page
-- sign-in page
-- feed preview
-- meme editor workspace
-- profile preview
-- health endpoint
+Open **http://localhost:3000**
 
-## Next Build Steps
+Optional — connect Supabase: copy `.env.example` to `apps/web/.env.local` and add your project URL + anon key.
 
-- connect live Supabase auth flows
-- persist memes and comments in Postgres
-- wire uploads to Supabase Storage
-- replace mock feed data with database queries
+## Features
 
+- Pet-name signup/login with recovery key
+- Canvas meme editor (upload, templates, top/bottom text)
+- Social feed with likes and comments
+- Creator profiles
+
+## Deploy (free)
+
+| What | Where |
+|------|--------|
+| App (Next.js) | **Vercel** (recommended) |
+| Database + auth + images | **Supabase** |
+
+See **[docs/HOSTING.md](docs/HOSTING.md)** for step-by-step setup.
+
+GitHub Pages is **not** suitable for this Next.js app as-is (needs a server). Use Vercel for free hosting.
+
+## Scripts
+
+```bash
+npm run dev      # development
+npm run build    # production build
+npm run lint     # eslint
+```

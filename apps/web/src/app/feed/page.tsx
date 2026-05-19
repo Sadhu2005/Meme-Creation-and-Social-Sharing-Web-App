@@ -1,19 +1,39 @@
+import Link from "next/link";
+
 import { PageIntro } from "@/components/shared/page-intro";
-import { FeedList } from "@/features/feed/feed-list";
-import { getFeedPreview } from "@/server/services/feed.service";
+import { FeedContainer } from "@/features/feed/feed-container";
+import { getFeedMemes } from "@/server/services/feed.service";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export default async function FeedPage() {
-  const memes = await getFeedPreview();
+  const supabase = await createServerSupabaseClient();
+  let userId: string | undefined;
+
+  if (supabase) {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    userId = user?.id;
+  }
+
+  const initialMemes = await getFeedMemes(userId);
 
   return (
     <div className="space-y-10">
       <PageIntro
         eyebrow="Community feed"
-        title="Preview the content surface before wiring in live queries."
-        description="The feed is already structured around reusable cards and a server-side service layer, so replacing mock data with Supabase queries is straightforward."
+        title="Latest memes from creators"
+        description="Like, comment, and explore — privacy-first accounts with no email required."
       />
-      <FeedList memes={memes} />
+      <div className="flex justify-end">
+        <Link
+          href="/editor"
+          className="rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)]"
+        >
+          Create meme
+        </Link>
+      </div>
+      <FeedContainer initialMemes={initialMemes} />
     </div>
   );
 }
-
